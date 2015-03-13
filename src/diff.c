@@ -115,10 +115,14 @@ static int diff_delta__from_one(
 		delta->old_file.mode = entry->mode;
 		delta->old_file.size = entry->file_size;
 		git_oid_cpy(&delta->old_file.id, &entry->id);
+		delta->old_file.mtime = entry->mtime.seconds;
+		delta->old_file.ctime = entry->ctime.seconds;
 	} else /* ADDED, IGNORED, UNTRACKED */ {
 		delta->new_file.mode = entry->mode;
 		delta->new_file.size = entry->file_size;
 		git_oid_cpy(&delta->new_file.id, &entry->id);
+		delta->new_file.mtime = entry->mtime.seconds;
+		delta->new_file.ctime = entry->ctime.seconds;
 	}
 
 	delta->old_file.flags |= GIT_DIFF_FLAG_VALID_ID;
@@ -164,10 +168,14 @@ static int diff_delta__from_two(
 	delta->old_file.size = old_entry->file_size;
 	delta->old_file.mode = old_mode;
 	delta->old_file.flags |= GIT_DIFF_FLAG_VALID_ID;
+	delta->old_file.mtime = old_entry->mtime.seconds;
+	delta->old_file.ctime = old_entry->ctime.seconds;
 
 	git_oid_cpy(&delta->new_file.id, &new_entry->id);
 	delta->new_file.size = new_entry->file_size;
 	delta->new_file.mode = new_mode;
+	delta->new_file.mtime = new_entry->mtime.seconds;
+	delta->new_file.ctime = new_entry->ctime.seconds;
 
 	if (new_oid) {
 		if (DIFF_FLAG_IS_SET(diff, GIT_DIFF_REVERSE))
